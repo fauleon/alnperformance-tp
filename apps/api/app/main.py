@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 from .config import settings
 from .domain import Approval, AuditEvent, GoogleSearchCampaignPlan, PlanRecord, PlanStatus
 from .policy import evaluate_plan
+from .providers import ProviderName, capabilities
 from .store import store
 
 app = FastAPI(title="ALN Performance AI Ads Manager", version="0.1.0")
@@ -56,6 +57,27 @@ def audit(tenant: TenantContext, action: str, actor: str, resource_id: str, resu
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok", "mutations": "disabled" if settings.global_kill_switch else "enabled"}
+
+
+@app.get("/v1/providers")
+async def provider_capabilities(
+    tenant: Annotated[TenantContext, Depends(tenant_context)],
+) -> list[dict[str, object]]:
+    state = f"{tenant.organization_id}:{tenant.workspace_id}"
+    return [capabilities(provider, state).model_dump(mode="json") for provider in ProviderName]
+
+
+@app.post("/v1/connections/{provider}/start")
+async def start_provider_connection(
+    provider: ProviderName,
+    tenant: Annotated[TenantContext, Depends(tenant_context)],
+) -> dict[str, object]:
+    state = f"{tenant.organization_id}:{tenant.workspace_id}"
+    capability = capabilities(provider, state)
+    if not capability.configured or not capability.oauth_url:
+        raise HTTPException(status_code=503, detail=f"Credenciais de {provider.value} ainda não configuradas")
+    audit(tenant, "provider.oauth_started", "demo-user", provider.value, "redirect")
+    return {"provider": provider.value, "authorization_url": capability.oauth_url}
 
 
 @app.post("/v1/plans", response_model=PlanRecord, status_code=status.HTTP_201_CREATED)

@@ -14,6 +14,12 @@ A IA é uma camada consultiva. Ela nunca recebe credenciais nem chama providers 
 - `apps/api/app/main.py`: API, isolamento de tenant e fluxo operacional.
 - `apps/api/app/store.py`: store temporário do protótipo; substituir por PostgreSQL + RLS na Sprint 1.
 
+## Providers e autoridade de edição
+
+Os catálogos de capabilities de Google Ads e Meta Ads estão expostos em `GET /v1/providers`. O início de OAuth usa `POST /v1/connections/{provider}/start` e só retorna uma URL oficial quando todas as credenciais obrigatórias estiverem configuradas.
+
+O escopo funcional previsto cobre leitura, criação, pausa e edição de campanhas e recursos associados. Orçamento é tecnicamente editável, mas sempre exige proposta financeira e confirmação humana separada. Payments, billing methods e add funds são capabilities inexistentes.
+
 ## Próximas integrações
 
 1. PostgreSQL, Alembic e RLS por organização/workspace.
@@ -21,4 +27,3 @@ A IA é uma camada consultiva. Ela nunca recebe credenciais nem chama providers 
 3. OpenAI Responses API com Structured Outputs e evals.
 4. Redis + ARQ para Saga, retry, reconciliação e DLQ.
 5. Google Ads validate-only e criação real exclusivamente em `PAUSED`.
-
