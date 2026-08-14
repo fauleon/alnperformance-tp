@@ -1,0 +1,29 @@
+services:
+  web:
+    build: ./apps/web
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports: ["3000:3000"]
+    depends_on: [api]
+  api:
+    build: ./apps/api
+    environment:
+      APP_ENV: development
+      DATABASE_URL: postgresql+asyncpg://aln:aln@postgres:5432/aln_ads
+      REDIS_URL: redis://redis:6379/0
+      GOOGLE_ADS_MUTATIONS_ENABLED: "false"
+      GLOBAL_KILL_SWITCH: "true"
+    ports: ["8000:8000"]
+    depends_on: [postgres, redis]
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: aln_ads
+      POSTGRES_USER: aln
+      POSTGRES_PASSWORD: aln
+    volumes: ["postgres_data:/var/lib/postgresql/data"]
+  redis:
+    image: redis:7-alpine
+volumes:
+  postgres_data:
+
