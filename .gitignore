@@ -1,5 +1,8 @@
 .env
 .env.local
+client_secret_*.json
+credentials*.json
+google-ads*.yaml
 __pycache__/
 *.py[cod]
 *.egg-info/
