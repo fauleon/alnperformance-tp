@@ -17,6 +17,8 @@ class Settings(BaseSettings):
     google_ads_developer_token: str | None = None
     meta_app_id: str | None = None
     meta_app_secret: str | None = None
+    token_encryption_key: str | None = None
+    oauth_state_secret: str | None = None
 
 
 settings = Settings()
