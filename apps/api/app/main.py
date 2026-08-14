@@ -15,7 +15,7 @@ from .store import store
 app = FastAPI(title="ALN Performance AI Ads Manager", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[origin.strip() for origin in settings.cors_origins.split(",") if origin.strip()],
     allow_methods=["*"],
     allow_headers=["*"],
 )

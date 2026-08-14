@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     global_kill_switch: bool = True
     default_daily_budget_limit: str = "100.00"
     public_api_url: str = "http://localhost:8000"
+    cors_origins: str = "http://localhost:3000"
     google_client_id: str | None = None
     google_client_secret: str | None = None
     google_ads_developer_token: str | None = None
