@@ -5,14 +5,27 @@ import { useState } from "react";
 
 type View = "Visão geral" | "Copiloto IA" | "Campanhas" | "Integrações" | "Aprovações" | "Métricas" | "Auditoria";
 type Provider = "google" | "meta";
+type NavIconName = "home" | "spark" | "campaign" | "link" | "approve" | "metrics" | "audit";
 
-const nav: Array<[View, string]> = [["Visão geral", "⌂"], ["Copiloto IA", "✦"], ["Campanhas", "◫"], ["Integrações", "↗"], ["Aprovações", "✓"], ["Métricas", "⌁"], ["Auditoria", "≡"]];
+const nav: Array<[View, NavIconName]> = [["Visão geral", "home"], ["Copiloto IA", "spark"], ["Campanhas", "campaign"], ["Integrações", "link"], ["Aprovações", "approve"], ["Métricas", "metrics"], ["Auditoria", "audit"]];
 const scopes = {
   google: ["Campanhas e grupos", "Anúncios e assets", "Palavras-chave e negativas", "Segmentações", "Lances e orçamento*", "Conversões e métricas"],
   meta: ["Campanhas e conjuntos", "Anúncios e criativos", "Públicos e posicionamentos", "Pixel e eventos", "Otimização e orçamento*", "Insights e métricas"],
 };
 
 function Arrow() { return <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>; }
+function NavIcon({ name }: { name: NavIconName }) {
+  const paths = {
+    home: <><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9M9 20v-6h6v6"/></>,
+    spark: <><path d="m12 3 1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3Z"/><path d="m5 15 .8 2.2L8 18l-2.2.8L5 21l-.8-2.2L2 18l2.2-.8L5 15Z"/></>,
+    campaign: <><path d="M4 6h16M4 12h10M4 18h7"/><circle cx="18" cy="15" r="3"/></>,
+    link: <><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1-1"/></>,
+    approve: <><rect x="3" y="3" width="18" height="18" rx="5"/><path d="m7 12 3 3 7-7"/></>,
+    metrics: <><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></>,
+    audit: <><path d="M7 4h10M7 9h10M7 14h6M5 2h14a2 2 0 0 1 2 2v16H3V4a2 2 0 0 1 2-2Z"/><path d="m15 17 2 2 4-4"/></>,
+  }[name];
+  return <svg viewBox="0 0 24 24" aria-hidden="true">{paths}</svg>;
+}
 
 export default function Home() {
   const [view, setView] = useState<View>("Visão geral");
@@ -42,7 +55,7 @@ export default function Home() {
         <span className="productName"><strong>ALNAPI</strong><small>ADS INTELLIGENCE</small></span>
       </button>
       <small className="navTitle">WORKSPACE</small>
-      <nav>{nav.map(([label, icon]) => <button key={label} className={view === label ? "active" : ""} onClick={() => setView(label)}><i>{icon}</i><span>{label}</span>{label === "Aprovações" && <b>2</b>}</button>)}</nav>
+      <nav>{nav.map(([label, icon]) => <button key={label} className={view === label ? "active" : ""} onClick={() => setView(label)}><i><NavIcon name={icon}/></i><span>{label}</span>{label === "Aprovações" && <b>2</b>}</button>)}</nav>
       <div className="sideBottom"><div className="protected"><span>✓</span><div><b>Modo protegido</b><small>Aprovação humana ativa</small></div></div><div className="user"><i>FA</i><div><b>Felipe Auleon</b><small>Administrador</small></div><span>•••</span></div></div>
     </aside>
 
@@ -61,7 +74,7 @@ type DashboardProps = { provider: Provider; setProvider: (v: Provider) => void; 
 function Dashboard(p: DashboardProps) {
   return <>
     <section className="hero"><div><span className="eyebrow"><i/> CENTRAL DE OPERAÇÃO INTELIGENTE</span><h2>Performance com contexto.<br/><em>Decisões com controle.</em></h2><p>Transforme briefing em campanhas prontas para revisão. A ALNAPI analisa, recomenda e prepara; você decide o que entra no ar.</p><div className="heroButtons"><button className="primary" onClick={() => document.getElementById("briefing")?.scrollIntoView({ behavior: "smooth" })}>Criar novo plano <Arrow/></button><button className="secondary" onClick={p.openIntegrations}>Conectar uma conta</button></div></div><div className="brandStage" aria-hidden="true"><div className="heroLogo"><Image src="/aln-performance-logo.png" alt="" width={1280} height={1280}/></div><span>ALN PERFORMANCE <i>ADS INTELLIGENCE</i></span></div></section>
-    <section className="stats"><article><i className="cyan">↗</i><div><small>CONTAS CONECTADAS</small><b>0</b><span>Aguardando OAuth</span></div></article><article><i className="pink">✓</i><div><small>ALTERAÇÕES PENDENTES</small><b>2</b><span>Precisam da sua decisão</span></div></article><article><i className="purple">✦</i><div><small>AÇÕES DA IA</small><b>24</b><span>Nos últimos 7 dias</span></div></article></section>
+    <section className="stats"><article><i className="cyan">↗</i><div><small>CONTAS CONECTADAS</small><b>0</b><span>Aguardando OAuth</span></div><em className="miniBars"><i/><i/><i/><i/></em></article><article><i className="pink">✓</i><div><small>ALTERAÇÕES PENDENTES</small><b>2</b><span>Precisam da sua decisão</span></div><em className="miniBars pinkBars"><i/><i/><i/><i/></em></article><article><i className="purple">✦</i><div><small>AÇÕES DA IA</small><b>24</b><span>Nos últimos 7 dias</span></div><em className="miniBars purpleBars"><i/><i/><i/><i/></em></article></section>
     <div className="workGrid">
       <section className="panel" id="briefing"><div className="panelHead"><div><small>PLANO DE CAMPANHA</small><h3>Briefing inteligente</h3><p>Defina o essencial. A IA estrutura o restante.</p></div><b>RASCUNHO</b></div><div className="steps">{["Briefing", "Estratégia", "Validar", "Aprovar", "Aplicar"].map((x, i) => <span className={i === 0 ? "current" : ""} key={x}><i>{i + 1}</i><small>{x}</small></span>)}</div>
         <label>Empresa ou projeto<input value={p.company} onChange={e => p.setCompany(e.target.value)}/></label><label>Oferta principal<textarea value={p.offer} onChange={e => p.setOffer(e.target.value)}/></label><div className="two"><label>Orçamento diário<div className="money"><span>R$</span><input inputMode="decimal" value={p.budget} onChange={e => p.setBudget(e.target.value)}/></div></label><label>Canal<select value={p.provider} onChange={e => p.setProvider(e.target.value as Provider)}><option value="google">Google Ads</option><option value="meta">Meta Ads</option></select></label></div><label>Landing page<input type="url" value={p.url} onChange={e => p.setUrl(e.target.value)}/></label>
