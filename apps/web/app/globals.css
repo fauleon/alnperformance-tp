@@ -6,3 +6,22 @@
 @media(max-width:1040px){.appShell{grid-template-columns:78px 1fr}.brand{justify-content:center;padding-inline:0}.brandCrop{width:50px}.brand>span:last-child,.navTitle,.sidebar nav button span,.protected div,.user div,.user>span{display:none}.sidebar nav button{justify-content:center}.sidebar nav button>b{position:absolute;right:1px;top:1px}.protected{justify-content:center}.user{justify-content:center}.workGrid{grid-template-columns:1fr}.preview{order:-1}.mainContent{padding-inline:24px}.radar{width:220px}}
 @media(max-width:700px){.appShell{display:block}.sidebar{position:fixed;inset:auto 0 0;height:66px;flex-direction:row;padding:7px 10px;border:0;border-top:1px solid var(--line)}.brand,.sideBottom,.navTitle{display:none}.sidebar nav{display:flex;width:100%;justify-content:space-around}.sidebar nav button{display:none;padding:10px 13px}.sidebar nav button:nth-child(-n+5){display:flex}.sidebar nav button.active:before{left:8px;right:8px;top:auto;bottom:-7px;width:auto;height:2px}.mainContent{padding:21px 13px 86px}.mainContent>header p,.status,.headerTools>button{display:none}header h1{font-size:23px}.hero{min-height:auto;padding:28px 21px}.hero h2{font-size:32px}.radar{display:none}.heroButtons{flex-direction:column}.stats{grid-template-columns:1fr}.stats article:nth-child(n+2){display:none}.two,.providerCards{grid-template-columns:1fr}.panel{padding:17px}.scope>div,.scopeList{grid-template-columns:1fr}.connectBar{align-items:flex-start;gap:10px}.connectBar .secondary{width:42px;min-width:42px;padding:0;font-size:0}.integrationIntro h2{font-size:33px}.providerHead>b{display:none}.finance{grid-template-columns:55px 1fr}.finance>i{width:50px;height:50px}.finance button{grid-column:1/-1}.toast{left:13px;right:13px;bottom:79px}.steps small{display:none}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Brand polish: preserve the complete mark and replace the placeholder orbit. */
+.brand{display:grid;grid-template-columns:112px 1fr;align-items:center;gap:10px;width:100%;padding:0 4px 25px}
+.brandCrop{position:relative;width:112px;height:62px;overflow:hidden;border:0;border-radius:11px;background:#000;box-shadow:none;filter:drop-shadow(0 0 10px #8b4cff44)}
+.brandCrop img{position:static;width:100%;height:100%;max-width:100%;object-fit:cover;object-position:center 52%}
+.productName strong{display:block;font-size:17px;letter-spacing:.14em}
+.productName small{display:block;margin-top:5px;color:#8993a7;font:6px 'Space Mono';letter-spacing:.16em;white-space:nowrap}
+.brandStage{position:relative;z-index:1;width:340px;height:210px;display:grid;place-items:center;isolation:isolate}
+.brandAura{position:absolute;width:250px;height:150px;border-radius:50%;background:radial-gradient(ellipse,#8b4cff38 0%,#24c8ff1c 42%,transparent 72%);filter:blur(9px);animation:brandBreath 5s ease-in-out infinite}
+.heroLogo{position:relative;z-index:2;width:270px;height:150px;overflow:hidden;filter:drop-shadow(0 12px 22px #000) drop-shadow(0 0 16px #8b4cff44)}
+.heroLogo img{width:100%;height:100%;object-fit:cover;object-position:center 52%}
+.brandStage:before,.brandStage:after{content:"";position:absolute;border-radius:50%;border:1px solid #24c8ff38;inset:18px 34px;transform:rotate(-9deg);box-shadow:inset 0 0 30px #24c8ff0b}
+.brandStage:after{inset:42px 15px;border-color:#ff168a35;transform:rotate(8deg)}
+.aiChip,.dataChip{position:absolute;z-index:3;padding:7px 9px;border:1px solid #ffffff17;border-radius:8px;background:#080b14cc;backdrop-filter:blur(10px);color:#a8b1c3;font:6px 'Space Mono';letter-spacing:.1em;box-shadow:0 12px 28px #0008}
+.aiChip{top:22px;right:4px}.dataChip{bottom:19px;left:14px}.aiChip i,.dataChip i{margin-left:6px;color:var(--ok);font-style:normal}
+.hero{min-height:286px}.hero>div:first-child{max-width:700px}.hero p{font-size:13px}.stats article{min-height:78px}.stats small{font-size:8px}.stats span{font-size:9px}.panelHead p{font-size:9px}.scope span,.guards span{font-size:9px}
+@keyframes brandBreath{50%{transform:scale(1.08);opacity:.72}}
+@media(max-width:1040px){.brand{display:flex;padding-inline:0}.brandCrop{width:52px;height:52px}.productName{display:none}.brandStage{width:245px}.heroLogo{width:220px;height:125px}.aiChip,.dataChip{display:none}}
+@media(max-width:700px){.brand{display:none}.brandStage{display:none}.hero{min-height:auto}.hero p{font-size:12px}}

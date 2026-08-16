@@ -38,8 +38,8 @@ export default function Home() {
   return <main className="appShell">
     <aside className="sidebar">
       <button className="brand" onClick={() => setView("Visão geral")} aria-label="ALNAPI — início">
-        <span className="brandCrop"><Image src="/logoalnperformance.png" alt="ALN Performance" width={1280} height={1280} priority /></span>
-        <span><strong>ALNAPI</strong><small>PERFORMANCE OS</small></span>
+        <span className="brandCrop"><Image src="/aln-performance-logo.png" alt="ALN Performance" width={1280} height={1280} priority /></span>
+        <span className="productName"><strong>ALNAPI</strong><small>ADS INTELLIGENCE</small></span>
       </button>
       <small className="navTitle">WORKSPACE</small>
       <nav>{nav.map(([label, icon]) => <button key={label} className={view === label ? "active" : ""} onClick={() => setView(label)}><i>{icon}</i><span>{label}</span>{label === "Aprovações" && <b>2</b>}</button>)}</nav>
@@ -58,7 +58,7 @@ export default function Home() {
 type DashboardProps = { provider: Provider; setProvider: (v: Provider) => void; company: string; setCompany: (v: string) => void; offer: string; setOffer: (v: string) => void; budget: string; setBudget: (v: string) => void; url: string; setUrl: (v: string) => void; busy: boolean; generatePlan: () => void; openIntegrations: () => void };
 function Dashboard(p: DashboardProps) {
   return <>
-    <section className="hero"><div><span className="eyebrow"><i/> CENTRAL DE OPERAÇÃO INTELIGENTE</span><h2>Performance com contexto.<br/><em>Decisões com controle.</em></h2><p>Transforme briefing em campanhas prontas para revisão. A ALNAPI analisa, recomenda e prepara; você decide o que entra no ar.</p><div className="heroButtons"><button className="primary" onClick={() => document.getElementById("briefing")?.scrollIntoView({ behavior: "smooth" })}>Criar novo plano <Arrow/></button><button className="secondary" onClick={p.openIntegrations}>Conectar uma conta</button></div></div><div className="radar" aria-hidden="true"><span>ALN<strong>AI</strong></span><i/><i/><i/></div></section>
+    <section className="hero"><div><span className="eyebrow"><i/> CENTRAL DE OPERAÇÃO INTELIGENTE</span><h2>Performance com contexto.<br/><em>Decisões com controle.</em></h2><p>Transforme briefing em campanhas prontas para revisão. A ALNAPI analisa, recomenda e prepara; você decide o que entra no ar.</p><div className="heroButtons"><button className="primary" onClick={() => document.getElementById("briefing")?.scrollIntoView({ behavior: "smooth" })}>Criar novo plano <Arrow/></button><button className="secondary" onClick={p.openIntegrations}>Conectar uma conta</button></div></div><div className="brandStage" aria-hidden="true"><div className="brandAura"/><div className="heroLogo"><Image src="/aln-performance-logo.png" alt="" width={1280} height={1280}/></div><span className="aiChip">ALN INTELLIGENCE <i>ONLINE</i></span><span className="dataChip">CONTROLE HUMANO <i>ATIVO</i></span></div></section>
     <section className="stats"><article><i className="cyan">↗</i><div><small>CONTAS CONECTADAS</small><b>0</b><span>Aguardando OAuth</span></div></article><article><i className="pink">✓</i><div><small>ALTERAÇÕES PENDENTES</small><b>2</b><span>Precisam da sua decisão</span></div></article><article><i className="purple">✦</i><div><small>AÇÕES DA IA</small><b>24</b><span>Nos últimos 7 dias</span></div></article></section>
     <div className="workGrid">
       <section className="panel" id="briefing"><div className="panelHead"><div><small>PLANO DE CAMPANHA</small><h3>Briefing inteligente</h3><p>Defina o essencial. A IA estrutura o restante.</p></div><b>RASCUNHO</b></div><div className="steps">{["Briefing", "Estratégia", "Validar", "Aprovar", "Aplicar"].map((x, i) => <span className={i === 0 ? "current" : ""} key={x}><i>{i + 1}</i><small>{x}</small></span>)}</div>
