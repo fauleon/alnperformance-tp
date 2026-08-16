@@ -49,7 +49,9 @@ export default function Home() {
     <section className="mainContent">
       <header><div><small className="crumb">ALN PERFORMANCE <b>/</b> ALNAPI</small><h1>{view}</h1><p>Seu centro de comando para mídia paga, com inteligência e controle.</p></div><div className="headerTools"><span className="status"><i/> AMBIENTE PROTEGIDO</span><button aria-label="Notificações">◇</button><i className="avatar">FA</i></div></header>
 
-      {view === "Integrações" ? <Integrations provider={provider} setProvider={setProvider} notify={notify}/> : <Dashboard provider={provider} setProvider={setProvider} company={company} setCompany={setCompany} offer={offer} setOffer={setOffer} budget={budget} setBudget={setBudget} url={url} setUrl={setUrl} busy={busy} generatePlan={generatePlan} openIntegrations={() => setView("Integrações")}/>}
+      {view === "Visão geral" && <Dashboard provider={provider} setProvider={setProvider} company={company} setCompany={setCompany} offer={offer} setOffer={setOffer} budget={budget} setBudget={setBudget} url={url} setUrl={setUrl} busy={busy} generatePlan={generatePlan} openIntegrations={() => setView("Integrações")}/>}
+      {view === "Integrações" && <Integrations provider={provider} setProvider={setProvider} notify={notify}/>}
+      {view !== "Visão geral" && view !== "Integrações" && <WorkspaceView view={view} notify={notify} openIntegrations={() => setView("Integrações")}/>}
     </section>
     {toast && <div className="toast" role="status"><b>✓</b>{toast}</div>}
   </main>;
@@ -58,7 +60,7 @@ export default function Home() {
 type DashboardProps = { provider: Provider; setProvider: (v: Provider) => void; company: string; setCompany: (v: string) => void; offer: string; setOffer: (v: string) => void; budget: string; setBudget: (v: string) => void; url: string; setUrl: (v: string) => void; busy: boolean; generatePlan: () => void; openIntegrations: () => void };
 function Dashboard(p: DashboardProps) {
   return <>
-    <section className="hero"><div><span className="eyebrow"><i/> CENTRAL DE OPERAÇÃO INTELIGENTE</span><h2>Performance com contexto.<br/><em>Decisões com controle.</em></h2><p>Transforme briefing em campanhas prontas para revisão. A ALNAPI analisa, recomenda e prepara; você decide o que entra no ar.</p><div className="heroButtons"><button className="primary" onClick={() => document.getElementById("briefing")?.scrollIntoView({ behavior: "smooth" })}>Criar novo plano <Arrow/></button><button className="secondary" onClick={p.openIntegrations}>Conectar uma conta</button></div></div><div className="brandStage" aria-hidden="true"><div className="brandAura"/><div className="heroLogo"><Image src="/aln-performance-logo.png" alt="" width={1280} height={1280}/></div><span className="aiChip">ALN INTELLIGENCE <i>ONLINE</i></span><span className="dataChip">CONTROLE HUMANO <i>ATIVO</i></span></div></section>
+    <section className="hero"><div><span className="eyebrow"><i/> CENTRAL DE OPERAÇÃO INTELIGENTE</span><h2>Performance com contexto.<br/><em>Decisões com controle.</em></h2><p>Transforme briefing em campanhas prontas para revisão. A ALNAPI analisa, recomenda e prepara; você decide o que entra no ar.</p><div className="heroButtons"><button className="primary" onClick={() => document.getElementById("briefing")?.scrollIntoView({ behavior: "smooth" })}>Criar novo plano <Arrow/></button><button className="secondary" onClick={p.openIntegrations}>Conectar uma conta</button></div></div><div className="brandStage" aria-hidden="true"><div className="heroLogo"><Image src="/aln-performance-logo.png" alt="" width={1280} height={1280}/></div><span>ALN PERFORMANCE <i>ADS INTELLIGENCE</i></span></div></section>
     <section className="stats"><article><i className="cyan">↗</i><div><small>CONTAS CONECTADAS</small><b>0</b><span>Aguardando OAuth</span></div></article><article><i className="pink">✓</i><div><small>ALTERAÇÕES PENDENTES</small><b>2</b><span>Precisam da sua decisão</span></div></article><article><i className="purple">✦</i><div><small>AÇÕES DA IA</small><b>24</b><span>Nos últimos 7 dias</span></div></article></section>
     <div className="workGrid">
       <section className="panel" id="briefing"><div className="panelHead"><div><small>PLANO DE CAMPANHA</small><h3>Briefing inteligente</h3><p>Defina o essencial. A IA estrutura o restante.</p></div><b>RASCUNHO</b></div><div className="steps">{["Briefing", "Estratégia", "Validar", "Aprovar", "Aplicar"].map((x, i) => <span className={i === 0 ? "current" : ""} key={x}><i>{i + 1}</i><small>{x}</small></span>)}</div>
@@ -72,6 +74,25 @@ function Dashboard(p: DashboardProps) {
     </div>
     <section className="connectBar"><div><i>↗</i><span><b>Suas contas ainda não estão conectadas</b><small>OAuth oficial, sem compartilhar senha ou código de autenticação.</small></span></div><button className="secondary" onClick={p.openIntegrations}>Configurar integrações <Arrow/></button></section>
   </>;
+}
+
+function WorkspaceView({ view, notify, openIntegrations }: { view: Exclude<View, "Visão geral" | "Integrações">; notify: (v: string) => void; openIntegrations: () => void }) {
+  const content = {
+    "Copiloto IA": { eyebrow: "ESTRATÉGIA ASSISTIDA", title: "Copiloto de performance", text: "Converse com a inteligência da ALNAPI para investigar gargalos, explorar hipóteses e preparar mudanças seguras.", action: "Iniciar diagnóstico", icon: "✦" },
+    "Campanhas": { eyebrow: "OPERAÇÃO MULTICANAL", title: "Campanhas", text: "Acompanhe estruturas, status e oportunidades de Google Ads e Meta Ads em um único lugar.", action: "Criar campanha", icon: "◫" },
+    "Aprovações": { eyebrow: "CENTRAL DE DECISÕES", title: "Aprovações pendentes", text: "Compare o antes e o depois, entenda o impacto e aprove somente o que fizer sentido.", action: "Revisar alterações", icon: "✓" },
+    "Métricas": { eyebrow: "INTELIGÊNCIA DE NEGÓCIO", title: "Métricas de performance", text: "Leitura executiva de investimento, conversões, custo e eficiência por canal.", action: "Atualizar relatório", icon: "⌁" },
+    "Auditoria": { eyebrow: "RASTREABILIDADE TOTAL", title: "Histórico e auditoria", text: "Cada recomendação, aprovação e execução registrada com data, responsável e possibilidade de reversão.", action: "Exportar histórico", icon: "≡" },
+  }[view];
+  const needsAccount = view === "Campanhas" || view === "Métricas" || view === "Copiloto IA";
+  return <section className="workspacePage">
+    <div className="workspaceHero"><div><span className="eyebrow"><i/> {content.eyebrow}</span><h2>{content.title}</h2><p>{content.text}</p></div><div className="workspaceSymbol">{content.icon}</div></div>
+    <div className="workspaceTools"><div className="searchBox"><span>⌕</span><input aria-label={`Pesquisar em ${view}`} placeholder={`Pesquisar em ${view.toLowerCase()}...`}/><kbd>⌘ K</kbd></div><button className="filterButton" onClick={() => notify("Filtros preparados para quando houver dados conectados.")}>Filtros <span>＋</span></button><button className="primary" onClick={needsAccount ? openIntegrations : () => notify(`${content.action}: fluxo preparado em modo seguro.`)}>{needsAccount ? "Conectar conta" : content.action}<Arrow/></button></div>
+    <div className="workspaceGrid">
+      <article className="emptyState"><div className="emptyIcon">{content.icon}</div><span>{needsAccount ? "PRÓXIMO PASSO" : "AMBIENTE PREPARADO"}</span><h3>{needsAccount ? "Conecte sua primeira conta" : "Nenhum item aguardando ação"}</h3><p>{needsAccount ? "Autorize o Google Ads para liberar dados reais, diagnósticos e ações desta área." : "Quando a ALNAPI gerar uma nova atividade, ela aparecerá aqui com todo o contexto."}</p><button className="primary" onClick={needsAccount ? openIntegrations : () => notify("Tudo certo por aqui.")}>{needsAccount ? "Ir para integrações" : "Ver visão geral"}<Arrow/></button></article>
+      <aside className="workspaceAside"><h3>Visão rápida</h3><div><span><i className="cyan">↗</i><b>Conta ativa</b><strong>0</strong></span><span><i className="pink">✓</i><b>Pendências</b><strong>{view === "Aprovações" ? "2" : "0"}</strong></span><span><i className="purple">✦</i><b>Automação</b><strong>Protegida</strong></span></div><section><b>Segurança operacional</b><p>Nenhuma mudança externa acontece sem prévia visualização e sua aprovação explícita.</p></section></aside>
+    </div>
+  </section>;
 }
 
 function Integrations({ provider, setProvider, notify }: { provider: Provider; setProvider: (v: Provider) => void; notify: (v: string) => void }) {
