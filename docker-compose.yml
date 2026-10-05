@@ -1,29 +1,44 @@
+# Local stack: Postgres + API (migrations on boot) + worker + web. Copy .env.example to .env first.
 services:
-  web:
-    build: ./apps/web
-    environment:
-      NEXT_PUBLIC_API_URL: http://localhost:8000
-    ports: ["3000:3000"]
-    depends_on: [api]
-  api:
-    build: ./apps/api
-    environment:
-      APP_ENV: development
-      DATABASE_URL: postgresql+asyncpg://aln:aln@postgres:5432/aln_ads
-      REDIS_URL: redis://redis:6379/0
-      GOOGLE_ADS_MUTATIONS_ENABLED: "false"
-      GLOBAL_KILL_SWITCH: "true"
-    ports: ["8000:8000"]
-    depends_on: [postgres, redis]
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: aln_ads
+      POSTGRES_DB: aln_hub_ia
       POSTGRES_USER: aln
       POSTGRES_PASSWORD: aln
     volumes: ["postgres_data:/var/lib/postgresql/data"]
-  redis:
-    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aln -d aln_hub_ia"]
+      interval: 5s
+      retries: 10
+  api:
+    build: ./apps/api
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://aln:aln@postgres:5432/aln_hub_ia
+      APP_URL: http://localhost:3000
+      PUBLIC_API_URL: http://localhost:3000/api
+      CORS_ORIGINS: http://localhost:3000
+    ports: ["8000:8000"]
+    depends_on:
+      postgres: {condition: service_healthy}
+  worker:
+    build: ./apps/api
+    command: ["python", "-m", "app.worker"]
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+asyncpg://aln:aln@postgres:5432/aln_hub_ia
+      APP_URL: http://localhost:3000
+      PUBLIC_API_URL: http://localhost:3000/api
+    depends_on: [api]
+  web:
+    build:
+      context: ./apps/web
+      args:
+        NEXT_PUBLIC_SITE_URL: http://localhost:3000
+    environment:
+      API_INTERNAL_URL: http://api:8000
+    ports: ["3000:3000"]
+    depends_on: [api]
 volumes:
   postgres_data:
-

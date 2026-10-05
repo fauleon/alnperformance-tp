@@ -1,23 +1,52 @@
 [project]
-name = "aln-ads-api"
-version = "0.1.0"
+name = "aln-hub-ia-api"
+version = "1.0.0"
 requires-python = ">=3.12"
 dependencies = [
   "fastapi>=0.116,<1",
   "uvicorn[standard]>=0.35,<1",
   "pydantic-settings>=2.10,<3",
+  "email-validator>=2.2,<3",
   "sqlalchemy[asyncio]>=2.0,<3",
+  "alembic>=1.16,<2",
   "asyncpg>=0.30,<1",
   "aiosqlite>=0.21,<1",
-  "redis>=6,<7",
   "httpx>=0.28,<1",
   "cryptography>=46,<47",
+  # Google Ads API v25 (fixed below in app/providers/google_ads.py).
+  "google-ads==33.0.0",
+  "sentry-sdk[fastapi]>=2.30,<3",
 ]
 [project.optional-dependencies]
 dev = ["pytest>=8,<9", "pytest-asyncio>=1,<2", "ruff>=0.12,<1", "mypy>=1.17,<2"]
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
 [tool.pytest.ini_options]
 pythonpath = ["."]
 asyncio_mode = "auto"
+addopts = "-p no:cacheprovider"
+asyncio_default_fixture_loop_scope = "session"
+asyncio_default_test_loop_scope = "session"
+filterwarnings = ["ignore::DeprecationWarning:google.*", "ignore::DeprecationWarning:proto.*"]
+
 [tool.ruff]
-line-length = 100
+line-length = 120
 target-version = "py312"
+extend-exclude = ["migrations/versions"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "ASYNC"]
+ignore = ["S101", "B008", "S105", "S106", "E501"]
+
+[tool.ruff.lint.per-file-ignores]
+# GAQL strings: every interpolated value is an ISO date, an int() or escaped by gaql_string().
+"app/providers/google_ads.py" = ["S608"]
+"tests/*" = ["S", "E501"]
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
+exclude = ["migrations/"]

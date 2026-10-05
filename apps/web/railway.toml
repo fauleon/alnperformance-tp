@@ -1,10 +1,10 @@
+# Service "web" (root directory: apps/web)
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-healthcheckPath = "/"
+healthcheckPath = "/robots.txt"
 healthcheckTimeout = 120
 restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 3
-
+restartPolicyMaxRetries = 5

@@ -1,0 +1,304 @@
+ALN DIGITAL + ALN PERFORMANCE -> ALN BRANDING STUDIO
+Roteiro do rebranding feito na ALN Performance (02/10/2026), adaptado para o site da ALN Branding Studio
+(https://alnbrandingstudio.com.br). Levantamento do projeto atual feito em 04/10/2026.
+Cada item tem: o que fazer, por quê e como conferir.
+
+Referências prontas:
+- D:\newalndigital            site estático (HTML/CSS/JS). Scripts em .qa\, README.md.
+- D:\projetos_aln\alnperformance\aln-performance   Next.js 16 -> referência de design, conteúdo e testes
+  (branch redesign-ecossistema-2026; scripts em .qa\, README.md).
+- D:\projetos_aln\alndeploy   mesmo roteiro aplicado na Deploy (aplicar-no-deploy.txt).
+
+O Studio é estático (dist\**\index.html) servido por Node (server.mjs, Node 24, Railway/Railpack).
+Siga a Digital para CSP/SEO/empacotamento e a Performance para visual, organização e testes
+(os scripts .cjs da Performance já são Node, então rodam direto aqui).
+
+======================================================================
+O QUE JÁ EXISTE NO STUDIO (levantado em 04/10/2026)
+======================================================================
+- Páginas: / , /servicos/, /processo/, /direcoes/ (menu "Projetos"), /sobre/, /contato/,
+  /privacidade/, /cookies/, /insights/ (fora do sitemap), /obrigado/, 404.html.
+  301 já existentes no server.mjs: /projetos/*  -> /direcoes/. MANTENHA.
+- Menu: Projetos | Serviços | Processo | Sobre + botão "Solicitar proposta".
+- Fontes locais: Sora + Manrope (woff2 + licenças em dist/assets/fonts). Já está certo.
+- Paleta publicada (dist/assets/styles.css, :root):
+    --bg #101113  --surface #181a1d  --paper #f0efeb  --ink #17191c  --text #f6f5f1
+    --muted #b0b1b7  --line #ffffff26  --amber #dfbd85  --cyan #b8cafb  --electric #bdcaff
+    --radius 12px  --max 1360px
+- Analytics: SIM. Google tag G-PDX9Y097TJ e Google Ads AW-11126722712, com banner de consentimento
+  (dist/assets/google-tag-bootstrap.js + app.js). Diferente da Performance: aqui NÃO remova,
+  porque o plano de Google Ads (PlanAlnBrandingStudio.txt) depende da conversão generate_lead.
+- Formulário: /contato/ -> POST /api/briefing (JSON) -> e-mail pelo Resend (fallback SMTP/nodemailer).
+  Campos: name, company, whatsapp, email, interest, budget, description, message, attachment.
+- Contato: contato@alndigital.com.br (23 ocorrências) e WhatsApp +55 11 92006-3286 (2 ocorrências).
+- security.txt existe em /seguranca.txt e em /.well-known/security.txt, MAS aponta para
+  alnstudio-production.up.railway.app.
+- llms.txt existe, mas cita o domínio "alnbrandstudio.com.br" (sem "ing") e a URL do Railway.
+  O README também. O robots.txt e o sitemap já usam alnbrandingstudio.com.br.
+- O server.mjs reescreve trechos de /privacidade/ e /cookies/ em tempo de execução
+  (body.replace(...), linhas ~300-345). O HTML do dist não é a versão final dessas páginas.
+- ATENÇÃO: o repositório tem 9 arquivos modificados sem commit (dist/*, server.mjs) e o
+  ALN_Branding_Studio_Google_Ads_Imagens_por_Grupo.docx não rastreado.
+
+======================================================================
+0. ANTES DE COMEÇAR
+======================================================================
+- Resolva as alterações pendentes: commite no main (ou descarte) ANTES de criar o branch.
+  Depois: git checkout -b redesign-ecossistema-2026. O main fica como backup.
+- Confirme o domínio oficial: alnbrandingstudio.com.br. Corrija "alnbrandstudio.com.br" no
+  README e no llms.txt e troque todas as URLs alnstudio-production.up.railway.app.
+  Confira se o domínio já responde: curl -sI https://alnbrandingstudio.com.br/
+- Teste cada URL do sitemap e os 301 /projetos/*:
+  curl -s -o /dev/null -w "%{http_code}" https://alnbrandingstudio.com.br/ROTA
+  Mantenha todas as rotas (como na Performance). Só crie 301 se mudar URL.
+- Defina o nome visível. Hoje o site usa "ALN Studio" e reserva "ALN Branding Studio" para o domínio.
+  No ecossistema (Digital/Performance) a unidade aparece como "ALN Branding Studio".
+  Decida um só nome visível e use igual em título, logo, JSON-LD, rodapé e llms.txt.
+- Contato: mantenha contato@alndigital.com.br (canal que existe). Não invente caixa nova.
+  (Na Performance/Deploy o e-mail é orcamento@alndigital.com.br: confirme qual vale para o Studio.)
+
+======================================================================
+1. IDENTIDADE VISUAL (o "formato" do ecossistema)
+======================================================================
+Sistema editorial igual ao da Digital e da Performance:
+- Manrope local (já existe). A Sora pode continuar só nos títulos, se você quiser manter o traço
+  do Studio; senão, fique só com a Manrope como as outras unidades. font-display:swap e preload.
+- Fundo escuro, tipografia grande (h1 com letter-spacing negativo), eyebrows numeradas
+  ("01 / TÍTULO DA SEÇÃO"), linhas finas de 1px, raio de 3 a 6px (hoje é 12px: reduza),
+  botões retos.
+- Alternância de seções: escura -> "papel" (#f0efeb, já existe) -> escura -> faixa final colorida.
+- Cores de destaque das unidades:
+    Digital      lima #d6ff62
+    Performance  degradê rosa #ff168a -> violeta #9b5cff -> ciano #24c8ff, fundo #03040a
+    Studio       USE AS JÁ PUBLICADAS: âmbar #dfbd85 como destaque principal, azul #b8cafb/#bdcaff
+                 como secundário, fundo #101113. Não invente paleta nova.
+- Tudo como variáveis em :root (--bg, --surface, --text, --muted, --line, --accent, --paper,
+  --ink...). Renomeie --amber para --accent (mantendo o valor). Nas seções claras, redefina
+  --muted/--line/--accent localmente (.section-paper). O âmbar #dfbd85 NÃO passa contraste como
+  texto sobre papel claro: na seção clara use um âmbar escurecido (algo perto de #7a5a22, confira AA).
+- Botão principal: o âmbar é claro -> texto escuro (#17191c), como a Digital faz com o lima.
+- Hero com peça visual própria em Canvas 2D (Digital: escultura em fita; Performance: trajetória
+  com os nós da logo). Para o Studio, algo ligado a construção de marca: forma sendo desenhada
+  (traço de pena/bézier que vira um monograma), grade tipográfica que se organiza, amostras de
+  cor se alinhando num sistema. Rima com "Design com intenção" e "Matéria & forma".
+  Regras: 24 fps, pausa fora da tela e em aba inativa, botão de pausa, prefers-reduced-motion,
+  economia de dados, imagem estática de fallback capturada do canvas (ver 7).
+  As ilustrações IA atuais (newcriation, newimageart, materia, studio) podem seguir nas páginas
+  internas, sempre identificadas como estudo conceitual, não case de cliente.
+
+======================================================================
+2. ORGANIZAÇÃO DO CONTEÚDO (lição principal da Performance)
+======================================================================
+A primeira versão da Performance colocou tudo na home e ficou poluída. A versão aprovada:
+
+HOME ENXUTA (cerca de 5 blocos). A home do Studio hoje tem hero + 5 seções (portfólio,
+"O próximo capítulo", "Da intenção...", "Clareza para...", fechamento). Reorganize assim:
+  1. Hero: eyebrow "UMA UNIDADE DO ECOSSISTEMA ALN DIGITAL", título "Design com intenção."
+     (já publicado), uma frase, botão "Solicitar proposta" + link "Ver projetos", peça visual e
+     faixa inferior com 3 ou 4 palavras-chave (ex.: Identidade visual · Social design ·
+     Materiais comerciais · Brand Kit, que são os serviços já publicados).
+  2. Serviços em LISTA elegante (número / nome / tipo / seta), cada linha levando a /servicos/
+     (ou a uma página por serviço), + botão "Ver todos os serviços". Nada de grade de cards.
+  3. Duas chamadas lado a lado (cards grandes): Projetos (/direcoes/) e Processo (/processo/).
+  4. Bloco "Ecossistema ALN" (4 unidades; o Studio marcado como "Você está aqui").
+  5. Faixa de fechamento âmbar com CTA "Solicitar proposta" + WhatsApp.
+
+O RESTO VAI PARA OS MENUS:
+  - Detalhes, listas longas, método, FAQ -> páginas próprias (/servicos/, /processo/, /sobre/).
+  - Um item de menu nunca aponta para uma âncora da home (/#algo).
+  - Menu com no máximo 5 itens + CTA à direita. Hoje são 4 + CTA: Projetos, Serviços, Processo,
+    Sobre. Se publicar /insights/, ele pode ser o 5º (hoje está fora do sitemap e do menu:
+    decida se publica ou remove).
+
+Conteúdo: reaproveite TODO o texto já publicado. Não invente números, clientes, anos de fundação
+ou resultados. Atenção especial: as imagens case-*.png (Bruna S Nails, Gen Massas...) e as
+"direções" só podem ser apresentadas como cases se forem trabalhos reais autorizados; as
+composições de IA continuam rotuladas como conceituais. Se reescrever um título, avise e peça revisão.
+FAQ só com respostas que o site já afirma.
+
+======================================================================
+3. LOGO
+======================================================================
+- Matriz em alta resolução, fundo transparente, versão PARA FUNDO ESCURO.
+  Em D:\projetos_aln\images\alndigital\logos hoje existem:
+    alnbrandingstudio.png  1586x992, SEM transparência  -> não serve de matriz
+    alnsudio_png.png       2172x724, com transparência  -> serve provisoriamente
+  Peça (ou exporte) uma alnbrandingstudio_parafundoescuro.png em alta resolução, transparente,
+  como as da Digital (4936 px) e da Performance (4908 px). Se mudar o nome visível (item 0),
+  a logo precisa refletir isso.
+- Nunca use paleta de 256 cores. Recorte o espaço transparente uma vez, reduza uma vez com Lanczos.
+- WebP em 160, 320, 480, 640, 960 e 1600 px (qualidade 92, alphaQuality 100) + PNG 600 px para o
+  JSON-LD. Anote a proporção para o width/height do <img>.
+- <img> simples com srcset/sizes="148px" em contêiner de largura fixa. Sem overflow:hidden.
+- Da mesma matriz: favicon 64, apple-touch-icon 180, ícones 192/512 (logo a 78% sobre #101113)
+  e imagem social 1200x630 (logo + título + peça do hero + domínio).
+- Script: ...\aln-performance\.qa\prepare-assets.cjs (aceita o caminho da matriz como argumento).
+  O sharp já está no package.json do Studio.
+- Limpe a pasta de imagens: hoje há 5,3 MB em dist/images + muitas variantes em dist/assets/images
+  (alnlimpa, project-nova, project-orbita, logo-studio, alnsudio_png...). Remova o que não for
+  mais referenciado depois do redesign.
+
+======================================================================
+4. RODAPÉ E ECOSSISTEMA
+======================================================================
+- Rodapé em colunas: logo + frase + e-mail + selo LGPD | Navegue | Serviços |
+  Ecossistema ALN | Vamos nos conectar (WhatsApp, Instagram, LinkedIn, São Paulo).
+- Linha final:
+    © 2026 ALN Branding Studio. Todos os direitos reservados.
+    Uma unidade do ecossistema ALN Digital.   (link para https://alndigital.com.br)
+  + Privacidade | Cookies | Voltar ao topo. (O link "Segurança" foi tirado do rodapé de propósito
+  no commit f6cbc61: mantenha fora.)
+- Ecossistema: ALN Digital (alndigital.com.br), ALN Performance (alnperformance.com.br),
+  ALN Deploy (alndeploy.com.br, se já publicada; senão "Em construção", sem link) e
+  ALN Branding Studio ("Você está aqui").
+  Confira nos sites da Digital, da Performance e da Deploy se o Studio aparece com o link
+  https://alnbrandingstudio.com.br e o mesmo nome visível.
+- Blog: https://alndigital.com.br/blog. Redes: instagram.com/alndigitalep e
+  linkedin.com/company/aln-digital (troque se o Studio tiver as próprias).
+
+======================================================================
+5. SEGURANÇA
+======================================================================
+5.1 CSP. Aqui o servidor Node já envia a CSP por cabeçalho (server.mjs, ~linha 203). Ajuste para:
+  default-src 'self'; script-src 'self' https://www.googletagmanager.com;
+  style-src 'self'; img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com
+  https://googleads.g.doubleclick.net https://www.google.com https://www.google.com.br;
+  font-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com
+  https://www.googletagmanager.com https://googleads.g.doubleclick.net https://www.google.com;
+  frame-src https://td.doubleclick.net https://www.googletagmanager.com;
+  form-action 'self' mailto:; base-uri 'self'; object-src 'none'; manifest-src 'self';
+  frame-ancestors 'none'; upgrade-insecure-requests
+  -> Os domínios do Google Ads (AW-) NÃO estão na CSP atual: a conversão de Ads pode estar sendo
+     bloqueada hoje. Confirme no console (Tag Assistant) e mantenha só o que o gtag realmente pede.
+  Pré-requisito: nenhum style="..." / onclick / <script> inline executável.
+  Hoje: 1 style="" em dist/servicos/index.html -> remover. JSON-LD pode ficar.
+  Use SVG com atributos em vez de style="height:..%".
+  Repita a mesma política em <meta http-equiv> só se quiser proteção também fora do Node
+  (meta não aceita frame-ancestors).
+5.2 <meta name="referrer" content="strict-origin-when-cross-origin">. target="_blank" sempre com
+  rel="noopener noreferrer".
+5.3 robots.txt: hoje bloqueia /obrigado/. Bloqueie /api/ também e mantenha /obrigado/ com noindex.
+5.4 /.well-known/security.txt: corrija Canonical/Policy para https://alnbrandingstudio.com.br,
+  adicione Expires: 2027-10-04T00:00:00Z (obrigatório na RFC 9116, hoje falta).
+  /seguranca.txt pode virar 301 para /.well-known/security.txt.
+5.5 Cabeçalhos no server.mjs (objeto headers):
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload   (hoje sem preload)
+  X-Content-Type-Options: nosniff | X-Frame-Options: DENY | Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
+  Cross-Origin-Opener-Policy: same-origin | Cross-Origin-Resource-Policy: same-origin
+  Envie HSTS e upgrade-insecure-requests só em produção (quebram http://127.0.0.1).
+5.6 Formulário /api/briefing. Hoje faltam várias proteções. Adicione:
+  - Consentimento obrigatório no cliente E no servidor (aceitar só privacy_consent="on"; sem ele 422).
+  - Hoje um corpo que não é JSON responde 200 "OK" sem enviar nada: devolva 400.
+  - Limite de tamanho do corpo (hoje não há: o servidor acumula tudo em memória). Ex.: 64 KB sem
+    anexo; se o anexo continuar, defina limite e tipos aceitos e valide no servidor.
+  - Honeypot, limite de tentativas por IP (use CF-Connecting-IP se estiver atrás da Cloudflare,
+    como foi feito na Deploy, commit 8612a1e), checagem de Origin.
+  - Validação de cada campo (tamanho, e-mail, telefone) e escape do HTML no e-mail enviado.
+  - autocomplete (name, organization, email, tel), type="email"/"tel", maxlength, minlength,
+    autocapitalize="words" no nome, spellcheck="false"/autocapitalize="off" no e-mail.
+  - Mensagens claras de envio, sucesso e erro, foco movido para a mensagem, campos PRESERVADOS
+    em caso de falha e alternativa (WhatsApp/e-mail) visível no erro.
+  - Envie só UTMs (utm_*) e gclid junto com o lead, não a query string inteira.
+  - Conversão generate_lead SÓ depois do 200 do servidor (regra do plano de Google Ads).
+  - Atualize o README e a /privacidade/: hoje dizem que "o site não transmite nem armazena os
+    campos", mas o briefing é enviado por e-mail via Resend. Isso precisa estar correto (LGPD).
+5.7 Publicação com lista fechada. O Railway publica a raiz do projeto filtrada pelo .railwayignore,
+  e o server.mjs serve só dist\. Confira que .railwayignore exclui *.docx, *.txt de trabalho
+  (PlanAlnBrandingStudio.txt, plano_ux_ui_text.txt, este arquivo), campaign-assets\, docs\,
+  scripts\, .preview\ e .history\. Referência de empacotamento: D:\newalndigital\.qa\package-site.cjs
+5.8 Auditoria antes de publicar:
+  grep -rIl "\.qa\|\.history\|\.preview\|127\.0\.0\.1\|localhost\|railway\.app\|password\|secret\|api_key\|token=" dist
+  find dist -name "*.map" -o -name "*.md" -o -name "*.cjs" -o -name "*.mjs" -o -name "*-source*"
+  Remova imagens antigas não referenciadas.
+  Mova as reescritas de /privacidade/ e /cookies/ do server.mjs para o próprio HTML do dist
+  (o servidor não deve editar páginas em tempo de execução).
+
+======================================================================
+6. SEO E IA
+======================================================================
+6.1 Em cada página: <title> único (até ~60 caracteres), description (até ~155), canonical absoluto
+  em https://alnbrandingstudio.com.br, robots "index, follow, max-image-preview:large,
+  max-snippet:-1, max-video-preview:-1", Open Graph completo (image 1200x630 + type/width/height/alt),
+  Twitter summary_large_image, icon, apple-touch-icon, manifest e um único H1.
+  /obrigado/: noindex.
+6.2 JSON-LD em @graph, em todas as páginas: Organization + ProfessionalService (logo PNG, contatos,
+  São Paulo, areaServed, sameAs, knowsAbout: branding, identidade visual, criação de marca,
+  rebranding; parentOrganization ALN Digital e as unidades irmãs), WebSite e WebPage com o tipo
+  certo (AboutPage, ContactPage, CollectionPage) + BreadcrumbList nas internas. Específicos:
+    /servicos/  -> OfferCatalog com um Service por serviço (os 4 publicados)
+    /processo/  -> HowTo (Diagnóstico, Direção, Sistema, Entrega) e FAQPage (só perguntas visíveis)
+    /direcoes/  -> CollectionPage (CreativeWork só para trabalhos reais)
+  Sem Offer com preço (o site não publica preços). Valide em https://validator.schema.org/
+6.3 404 no visual do site, noindex, sem segunda meta robots "index", status 404 (já devolve 404).
+6.4 sitemap.xml com <lastmod> fixo (data da publicação). Hoje não tem lastmod.
+6.5 robots.txt liberando buscadores e IAs (modelo: D:\newalndigital\robots.txt ou
+  ...\aln-performance\public\robots.txt), Disallow: /api/ e /obrigado/, Sitemap no final.
+6.6 llms.txt: hoje em inglês e com domínio errado. Reescreva no formato llmstxt.org, em português:
+  resumo factual, fatos principais, orientação de citação ("estudos visuais conceituais não são
+  cases de cliente"), Páginas principais, Ecossistema ALN, Conteúdo, Optional.
+6.7 llms-full.txt gerado do HTML renderizado: ...\aln-performance\.qa\llms-full.cjs (Playwright,
+  já instalado no Studio). Rode de novo sempre que o conteúdo mudar.
+6.8 Depois de publicar: sitemap no Google Search Console e no Bing Webmaster Tools.
+  Como há Google Ads, confira também se a URL final dos anúncios é o domínio novo.
+
+======================================================================
+7. DESEMPENHO
+======================================================================
+- Imagens: o Studio já tem WebP/AVIF em 640/960/1280/1600. Mantenha srcset/sizes, loading="lazy"
+  + decoding="async" fora da 1ª tela, fetchpriority="high" no topo, width/height sempre.
+- Fallback estático da peça do hero: capture o próprio canvas (Playwright com reducedMotion
+  'reduce'), WebP 720 px. Script: ...\aln-performance\.qa\capture-art.cjs. Use na imagem social.
+- CSS/JS com ?v=hash. Cache no server.mjs (hoje tudo sai com no-cache por padrão):
+  HTML/robots/sitemap/llms -> no-cache; CSS/JS versionados -> 1 ano immutable; assets -> 30 dias.
+  gzip/brotli (o Node não comprime sozinho: use zlib no server.mjs ou a Cloudflare).
+
+======================================================================
+8. ACESSIBILIDADE E UX
+======================================================================
+- "Pular para o conteúdo", foco visível, menu móvel com Escape, foco preso no menu e devolvido
+  ao botão. Breakpoint do menu pela largura real dos itens.
+- Não use role="img" num contêiner com botão dentro (pausa). role/aria-label no próprio canvas.
+- Textos sobre fundo claro: cinzas decorativos falham no contraste. Use o --muted da seção clara.
+- Banner de consentimento (cookies/analytics) compacto no celular, sem ocupar meia tela.
+  Ele já existe: só ajuste visual.
+- WhatsApp com mensagem pré-preenchida por página
+  (https://wa.me/5511920063286?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20ALN%20Branding%20Studio.).
+- Nenhum texto de prévia/teste visível em produção.
+
+======================================================================
+9. VERIFICAÇÃO
+======================================================================
+O Studio já tem scripts/verify-site.mjs (Playwright + axe, 320 a 2560 px, menu, teclado, sem JS,
+privacidade, headers, llms.txt). Amplie com o que a Performance testou:
+- Todas as páginas (incluindo a 404 e /obrigado/) em 320, 375, 768, 1024, 1440 e 1920 px.
+  Rolagem horizontal, 1 H1, título/description (tamanho), canonical, noindex na 404 e /obrigado/,
+  imagens quebradas, target=_blank sem noopener, erros de console/CSP e axe WCAG 2.1 A/AA.
+- verify-api: API recusa sem consentimento, recusa corpo inválido/grande, responde sem enviar
+  quando não há RESEND_API_KEY; UI com API simulada (sucesso limpa, erro preserva campos,
+  payload com UTM). NENHUM envio real.
+- Google tag: sem consentimento nada de analytics_storage; com consentimento page_view; e
+  generate_lead só após sucesso. Sem erro de CSP no console.
+- JSON-LD válido em cada página e ausência de style="".
+- Capturas em .preview\ (já ignorado): full page 1440 e 375 + recorte do hero.
+- Ao reiniciar o servidor local (porta 3088), mate o processo antigo.
+Pendente em qualquer projeto: Safari e aparelhos físicos, envio real autorizado do formulário e
+PageSpeed no ambiente final.
+
+======================================================================
+10. ORDEM SUGERIDA
+======================================================================
+1. Commitar pendências, branch, levantamento de URLs, domínio e nome visível.
+2. Paleta do Studio (âmbar/azul/#101113) -> variáveis do sistema editorial, raio menor.
+3. Logo e ícones a partir de uma matriz transparente para fundo escuro.
+4. Layout base: header, menu móvel, rodapé com o texto do ecossistema, 404.
+5. Home enxuta (5 blocos) + páginas internas recebendo o restante.
+6. Peça visual do hero (canvas) + fallback capturado + imagem social.
+7. Remover estilo inline -> CSP com domínios do Google -> metas -> JSON-LD -> sitemap, robots,
+   security.txt (domínio novo + Expires).
+8. llms.txt (português, domínio certo) e llms-full.txt.
+9. /api/briefing (consentimento, limite, honeypot, rate limit, validação) + cabeçalhos e cache;
+   texto de privacidade corrigido e tirado do server.mjs.
+10. Testes, auditoria do que sobe para o Railway.
+11. Publicar, confirmar SUCCESS no Railway, enviar sitemaps, conferir conversões do Google Ads e
+    o link/nome do Studio nos sites da Digital, Performance e Deploy.

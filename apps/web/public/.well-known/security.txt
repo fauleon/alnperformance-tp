@@ -1,0 +1,5 @@
+Contact: mailto:contato@alndigital.com.br
+Expires: 2027-10-05T00:00:00.000Z
+Preferred-Languages: pt, en
+Canonical: https://app.alnperformance.com.br/.well-known/security.txt
+Policy: https://app.alnperformance.com.br/seguranca

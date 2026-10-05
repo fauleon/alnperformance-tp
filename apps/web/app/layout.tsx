@@ -1,15 +1,31 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import "./globals.css";
+import { siteName, siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://alnapi-web-production.up.railway.app"),
-  title: "ALNAPI | Gestão inteligente de mídia paga",
-  description: "Central da ALN Performance para planejar, revisar e gerenciar Google Ads e Meta Ads com IA e aprovação humana.",
-  applicationName: "ALNAPI",
-  robots: { index: false, follow: false },
-  openGraph: { title: "ALNAPI | Gestão inteligente de mídia paga", description: "Performance com contexto, inteligência e controle humano.", type: "website", locale: "pt_BR", siteName: "ALNAPI" },
+  metadataBase: new URL(siteUrl),
+  title: { default: "ALN Hub ia | Google Ads e TikTok Ads com IA", template: `%s | ${siteName}` },
+  description: "Audite, planeje e opere Google Ads e TikTok Ads com inteligência artificial. Nada vai ao ar sem a sua aprovação.",
+  applicationName: siteName,
+  referrer: "strict-origin-when-cross-origin",
+  formatDetection: { telephone: false },
+  icons: {
+    icon: [{ url: "/brand/favicon-32.png", sizes: "32x32", type: "image/png" }, { url: "/brand/favicon-64.png", sizes: "64x64", type: "image/png" }],
+    apple: [{ url: "/brand/apple-touch-icon.png", sizes: "180x180" }],
+  },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="pt-BR"><body>{children}</body></html>;
+export const viewport: Viewport = { themeColor: "#07070c", colorScheme: "dark", width: "device-width", initialScale: 1 };
+
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // Reading the request makes every page render per request, so proxy.ts can apply a fresh CSP nonce.
+  await headers();
+  return <html lang="pt-BR">
+    <head>
+      <link rel="preload" href="/fonts/sora.woff2" as="font" type="font/woff2" crossOrigin="anonymous"/>
+      <link rel="preload" href="/fonts/manrope.woff2" as="font" type="font/woff2" crossOrigin="anonymous"/>
+    </head>
+    <body>{children}</body>
+  </html>;
 }

@@ -1,0 +1,8 @@
+# Service "worker" (root directory: apps/api, config file: apps/api/railway.worker.toml)
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+startCommand = "python -m app.worker"
+restartPolicyType = "ALWAYS"

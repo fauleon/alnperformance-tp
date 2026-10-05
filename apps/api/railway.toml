@@ -1,3 +1,4 @@
+# Service "api" (root directory: apps/api)
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
@@ -6,5 +7,4 @@ dockerfilePath = "Dockerfile"
 healthcheckPath = "/health"
 healthcheckTimeout = 120
 restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 3
-
+restartPolicyMaxRetries = 5

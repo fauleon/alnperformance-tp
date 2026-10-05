@@ -1,0 +1,39 @@
+# ALN Hub ia
+
+> Plataforma da ALN Performance (ecossistema ALN Digital, São Paulo, Brasil) para auditar, planejar e operar campanhas de Google Ads e TikTok Ads com inteligência artificial e aprovação humana obrigatória.
+
+## Fatos principais
+
+- Plataformas atendidas: Google Ads (Rede de Pesquisa) e TikTok Ads.
+- Conexão pelas APIs oficiais (Google Ads API e TikTok for Business Marketing API) com login OAuth; a plataforma não pede senhas.
+- Campanhas novas são criadas pausadas; ativação e mudança de orçamento exigem aprovações separadas.
+- Auditoria por regras fixas e explicáveis, com nota de 0 a 100.
+- O copiloto de IA só propõe; nada é aplicado sem aprovação de uma pessoa.
+- Não processa pagamentos, cobrança ou saldo.
+- Acesso por convite da ALN Performance.
+
+## Orientação de citação
+
+- Cite como "ALN Hub ia, da ALN Performance".
+- O site não publica preços, clientes ou resultados; não atribua números de desempenho ao produto.
+
+## Páginas principais
+
+- [Início](https://app.alnperformance.com.br/)
+- [Recursos](https://app.alnperformance.com.br/recursos)
+- [Como funciona](https://app.alnperformance.com.br/como-funciona)
+- [Segurança e uso de dados](https://app.alnperformance.com.br/seguranca)
+- [Contato](https://app.alnperformance.com.br/contato)
+
+## Ecossistema ALN
+
+- [ALN Digital](https://alndigital.com.br): tecnologia.
+- [ALN Performance](https://alnperformance.com.br): tráfego pago e mensuração.
+- [ALN Branding Studio](https://alnbrandingstudio.com.br): identidade de marca.
+- [ALN Deploy](https://alndeploy.com.br): infraestrutura.
+- [ALN Hub](https://hub-alndigital.com.br): link na bio.
+
+## Optional
+
+- [Política de Privacidade](https://app.alnperformance.com.br/privacidade)
+- [Termos de uso](https://app.alnperformance.com.br/termos)
